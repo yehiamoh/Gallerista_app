@@ -12,6 +12,7 @@ const port =process.env.PORT||8080;
 
       const app=express();
       app.use(bodyParser.json());
+      app.use(express.static('public'));
       app.use("/api/V0",authRouter);
       app.get('/api/V0/dummy',(req,res)=>{
          res.json({
