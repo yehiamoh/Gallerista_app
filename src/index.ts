@@ -9,8 +9,7 @@ dotenv.config();
 
 const port =process.env.PORT||8080;
 
-function start(){
-   try{
+
       const app=express();
       app.use(bodyParser.json());
       app.use("/api/V0",authRouter);
@@ -26,9 +25,5 @@ function start(){
       app.listen(port,()=>{
          console.log(`server is running on port : ${port}`)
       });
-   }
-   catch(error:any){
-      console.log(`error in running server \n ${error.toString()}`)
-   }
-}
-start();
+   
+export default app;
