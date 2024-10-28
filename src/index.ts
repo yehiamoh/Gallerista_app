@@ -17,12 +17,12 @@ const port =process.env.PORT||8080;
             message:"tst1"
          });
       });
-      app.get('api/V0/',(req,res)=>{
+      app.get('/api/V0/',(req,res)=>{
          res.json({
             from :"yehia",
             to :"fady",
          });
       });
-      app.use("/V0",apiKeyAuth,authRouter);
+      app.use("api/V0/",apiKeyAuth,authRouter);
       app.use(errorHandler);
 export default app;
