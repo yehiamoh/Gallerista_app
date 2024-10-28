@@ -1,6 +1,6 @@
 
 import jwt from "jsonwebtoken";
-const secretKey = process.env.JWT_SECRET as string;
+const secretKey = process.env.JWT_SECRET
 
 export const genertaeToken=(userId:string|undefined,role:string|undefined)=>{
    const payLoad={
