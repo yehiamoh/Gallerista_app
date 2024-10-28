@@ -83,11 +83,11 @@ export class AuthController {
             });
             return;
          }
-         //const userToken = genertaeToken(user?.user_id, user?.role);
+         const userToken = genertaeToken(user?.user_id, user?.role);
 
          res.status(200).json({
             message: "User logged in successfully",
-           // token: userToken,
+            token: userToken,
             user: {
                id: user?.user_id,
                email: user?.email,
