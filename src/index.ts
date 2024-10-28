@@ -12,19 +12,12 @@ const port =process.env.PORT||8080;
 
       const app=express();
       app.use(bodyParser.json());
-     /* app.get('/',(req,res)=>{
-         res.json({
-            message:"tst vercel "
-         })
-      })*/
-      app.get('/V0/dummy',(req,res)=>{
+      app.get('api/V0/dummy',(req,res)=>{
          res.json({
             message:"tst1"
          });
       });
-      app.use("/V0",apiKeyAuth,authRouter);
+      app.use("/api/V0",apiKeyAuth,authRouter);
       app.use(errorHandler);
-      /*app.listen(port,()=>{
-         console.log(`server is running on port : ${port}`)
-      });*/
+  
 export default app;
