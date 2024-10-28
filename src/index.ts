@@ -11,12 +11,17 @@ const port =process.env.PORT||8080;
 
 
       const app=express();
+      app.get('/',(req,res)=>{
+         res.json({
+            message:"tst vercel "
+         })
+      })
+      app.use(bodyParser.json());
       app.get('/api/V0/dummy',(req,res)=>{
          res.json({
             message:"tst1"
          });
       });
-      app.use(bodyParser.json());
       app.use("/api/V0",apiKeyAuth,authRouter);
       app.use(errorHandler);
       app.listen(port,()=>{
