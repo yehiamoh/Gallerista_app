@@ -23,6 +23,6 @@ const port =process.env.PORT||8080;
             to :"fady",
          });
       });
-      app.use("/api/V0/",authRouter);
+      app.use("/api/V0/",apiKeyAuth,authRouter);
       app.use(errorHandler);
 export default app;
