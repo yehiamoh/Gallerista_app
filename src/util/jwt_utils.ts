@@ -1,6 +1,7 @@
-
+import dotenv from "dotenv"
 import jwt from "jsonwebtoken";
-const secretKey = process.env.JWT_SECRET
+const secretKey = process.env.JWT_SECRET ;
+dotenv.config();
 
 export const genertaeToken=(userId:string|undefined,role:string|undefined)=>{
    const payLoad={
