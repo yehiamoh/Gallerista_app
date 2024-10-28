@@ -12,12 +12,17 @@ const port =process.env.PORT||8080;
 
       const app=express();
       app.use(bodyParser.json());
-      app.get('api/V0/dummy',(req,res)=>{
+      app.get('/V0/dummy',(req,res)=>{
          res.json({
             message:"tst1"
          });
       });
-      app.use("/api/V0",apiKeyAuth,authRouter);
+      app.get('/V0/',(req,res)=>{
+         res.json({
+            from :"yehia",
+            to :"fady",
+         });
+      });
+      app.use("/V0",apiKeyAuth,authRouter);
       app.use(errorHandler);
-  
 export default app;
