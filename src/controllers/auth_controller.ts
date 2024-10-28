@@ -57,6 +57,7 @@ export class AuthController {
       const { email, password } = req.body;
       try {
          const { error } = this.loginSchema.validate(req.body);
+         console.log('Login attempt for:', email); // Debug log
          if (error) {
             res.status(400).json({
                message: error.details[0].message
@@ -74,6 +75,7 @@ export class AuthController {
          }
 
          const hashedPassword = await bcrypt.compare(password, user!.password);
+         console.log('Password match:', hashedPassword); // Debug log
          if (!hashedPassword) {
             res.status(422).json({
                message: "Invalid password",
@@ -81,11 +83,11 @@ export class AuthController {
             });
             return;
          }
-         const userToken = genertaeToken(user?.user_id, user?.role);
+         //const userToken = genertaeToken(user?.user_id, user?.role);
 
          res.status(200).json({
             message: "User logged in successfully",
-            token: userToken,
+           // token: userToken,
             user: {
                id: user?.user_id,
                email: user?.email,
@@ -95,7 +97,7 @@ export class AuthController {
          return;
       }
       catch (error: any) {
-         console.log(error);
+         console.log(error.stack);
          next(error);
       }
 
