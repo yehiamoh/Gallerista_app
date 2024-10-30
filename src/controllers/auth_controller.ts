@@ -118,6 +118,7 @@ export class AuthController {
          return;
       }
       const refreshToken = cookies.jwt
+      console.log(refreshToken);
 
       const decoded= verifyRefreshToken(refreshToken);
       console.log("decoded verify refresh token", decoded.userId,decoded.role);
