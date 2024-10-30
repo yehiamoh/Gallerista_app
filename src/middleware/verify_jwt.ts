@@ -23,9 +23,6 @@ export function ensureAuthentication(
       });
       return;
     }
-
-  
-
     const decodedAccessToken = jwt.verify(authHeader, process.env.JWT_SECRET) as jwt.JwtPayload;
 
     if (!decodedAccessToken.userId) {
