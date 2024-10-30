@@ -82,8 +82,10 @@ export class AuthController {
             });
             return;
          }
-         const userToken = generateAcessToken(user?.user_id, user?.role);
+         const userToken = generateAcessToken(user.user_id, user.role);
+         console.log("userToken",userToken,user.user_id,user.role);
          const refreshToken=generateRefreshToken(user.user_id,user.role);
+         console.log("refreshToken",refreshToken,user.user_id,user.role);
 
          res.cookie('jwt',refreshToken,{
             httpOnly:true,
