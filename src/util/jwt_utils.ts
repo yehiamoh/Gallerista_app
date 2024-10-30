@@ -5,12 +5,12 @@ const secretKey = process.env.JWT_SECRET;
 const secretRefrshKey = process.env.JWT_REFRESH_SECRET;
 
 
-export const generateAcessToken=(userId:string|undefined,role:string|undefined)=>{
+export const generateAcessToken=(userId:string|undefined)=>{
  
-   return jwt.sign({userId:userId,role:role},secretKey,{expiresIn:'3m'})
+   return jwt.sign({userId:userId},secretKey,{expiresIn:'10d'})
 }
 export const generateRefreshToken=(userId:string|undefined,role:string|undefined)=>{
  
-   return jwt.sign({userId:userId,role:role},secretRefrshKey,{expiresIn:'60d'})
+   return jwt.sign({userId:userId},secretRefrshKey,{expiresIn:'60d'})
 }
 

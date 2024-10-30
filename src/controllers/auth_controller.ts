@@ -1,5 +1,5 @@
 
-import { PrismaClient, User, Role } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import bcrypt from "bcrypt"
 import joi from "joi";
@@ -44,14 +44,12 @@ export class AuthController {
                email: email,
                password: hashedPassword,
                phone: phone,
-               role: role === "admin" ? Role.admin : Role.user,
             }
          });
          res.status(201).json({
             user_id: user.user_id,
             name:user.name,
-            email: user.email,
-            role: user.role,
+            email: user.email
          });
          return;
       }
@@ -90,17 +88,17 @@ export class AuthController {
             });
             return;
          }
-         const userToken = generateAcessToken(user.user_id, user.role);
-         console.log("userToken",userToken,user.user_id,user.role);
-         const refreshToken=generateRefreshToken(user.user_id,user.role);
-         console.log("refreshToken",refreshToken,user.user_id,user.role);
+         const userToken = generateAcessToken(user.user_id);
+         console.log("userToken",userToken,user.user_id);
+       //  const refreshToken=generateRefreshToken(user.user_id);
+        // console.log("refreshToken",refreshToken,user.user_id);
 
-         res.cookie('jwt',refreshToken,{
+         -/*res.cookie('jwt',refreshToken,{
             httpOnly:true,
             secure:true,
             sameSite:"none",
             maxAge:7*24*60*60*1000,
-         })
+         })*/
 
          res.status(200).json({
             message: "User logged in successfully",
@@ -108,7 +106,6 @@ export class AuthController {
             user: {
                id: user?.user_id,
                email: user?.email,
-               role: user?.role,
             }
          });
          return;
@@ -144,7 +141,7 @@ export class AuthController {
          res.status(401).json({ message: 'Unauthorized' });
          return;
       }
-      const accessToken= generateAcessToken(user.user_id, user.role);
+      const accessToken= generateAcessToken(user.user_id);
 
       res.json({
          token : accessToken,
