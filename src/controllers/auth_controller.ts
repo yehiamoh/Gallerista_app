@@ -117,7 +117,8 @@ export class AuthController {
 
    }
    public static refresh :RequestHandler=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
-      const cookies=req.cookies;
+  try{
+       const cookies=req.cookies;
       if(!cookies.jwt){
          res.status(401).json({ message: 'Unauthorized' });
          return;
@@ -145,9 +146,14 @@ export class AuthController {
 
       res.json({
          token : accessToken,
-      })
+      });
+  }catch(error){
+   console.log(error);
+   next(error);
+  }
    }
    public static logout :RequestHandler=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+    try{
       const cookies=req.cookies;
       if(!cookies.jwt){
           res.status(204);
@@ -156,5 +162,10 @@ export class AuthController {
       res.clearCookie('jwt', { httpOnly: true, sameSite: "none", secure: true });
       res.json({ message: 'Cookie cleared' });
       return;
+    }
+    catch(error:any){
+      console.log(error);
+      next(error);
+    }
    }
 }
