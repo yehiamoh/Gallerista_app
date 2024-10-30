@@ -51,6 +51,7 @@ export function ensureAuthentication(
     }
 
     req.userId = decodedAccessToken.userId;
+    console.log("ensure auth middle ware req.userId = " ,req.userId);
     next();
     
   } catch (error) { // handel each case of the errors

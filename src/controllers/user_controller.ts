@@ -60,18 +60,18 @@ export class UserController{
    }
    public static getProfile:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction):Promise<void>=>{
       try{
-         const userID=req.userId;
+         /*const userID=req.userId;
          console.log(userID)
          if(!userID){
             res.status(401).json({
                message:"un authorized",
             });
             return;
-         }
+         }*/
 
          const user=await prisma.user.findUnique({
             where:{
-               user_id:userID
+               user_id:req.userId
             }
          });
          if(!user){
