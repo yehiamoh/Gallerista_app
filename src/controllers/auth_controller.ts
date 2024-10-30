@@ -118,13 +118,13 @@ export class AuthController {
       const refreshToken = cookies.jwt
 
       const decoded= verifyRefreshToken(refreshToken);
-      if(!decoded){
+      if (!decoded || !decoded.userId) {
          res.status(403).json({ message: 'Forbidden' });
          return;
-      }
+       }
       const user =await prisma.user.findUnique({
          where:{
-            user_id:decoded.user_id, //potentail error
+            user_id:decoded.userId,
          }
       });
       if(!user){
