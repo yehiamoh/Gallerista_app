@@ -3,9 +3,17 @@ import { PrismaClient, User, Role } from "@prisma/client";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import bcrypt from "bcrypt"
 import joi from "joi";
-import { generateAcessToken, generateRefreshToken, verifyRefreshToken } from "../util/jwt_utils";
+import { generateAcessToken, generateRefreshToken } from "../util/jwt_utils";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+
 
 const prisma = new PrismaClient();
+dotenv.config();
+
+const secretKey = process.env.JWT_SECRET;
+const secretRefrshKey = process.env.JWT_REFRESH_SECRET;
 
 export class AuthController {
    protected static registerSchema = joi.object({
@@ -118,24 +126,25 @@ export class AuthController {
          return;
       }
       const refreshToken = cookies.jwt
-      console.log(refreshToken);
+      console.log("refresh token",refreshToken);
 
-      const decoded= verifyRefreshToken(refreshToken);
-      console.log("decoded verify refresh token", decoded.userId,decoded.role);
-      if (!decoded || !decoded.userId) {
+      const decodedRefreshToken = jwt.verify(refreshToken, process.env.JWT_SECRET) as jwt.JwtPayload;
+      console.log("decoded verify refresh token", decodedRefreshToken.userId,decodedRefreshToken.role);
+
+      if (!decodedRefreshToken || !decodedRefreshToken.userId) {
          res.status(403).json({ message: 'Forbidden' });
          return;
        }
       const user =await prisma.user.findUnique({
          where:{
-            user_id:decoded.userId,
+            user_id:decodedRefreshToken.userId,
          }
       });
       if(!user){
          res.status(401).json({ message: 'Unauthorized' });
          return;
       }
-      const accessToken= generateAcessToken( user.user_id, user.role);
+      const accessToken= generateAcessToken(user.user_id, user.role);
 
       res.json({
          token : accessToken,
