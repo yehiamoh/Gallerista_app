@@ -3,6 +3,7 @@ import express from"express";
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import authRouter from "./routes/auth_routes";
+import userRouter from "./routes/user_routes";
 import errorHandler from "./middleware/error_handler";
 import {apiKeyAuth} from "./util/api_key"
 import cookieParser from "cookie-parser";
@@ -19,12 +20,7 @@ const port =process.env.PORT||8080;
             message:"tst1"
          });
       });
-      app.get('/api/V0/',(req,res)=>{
-         res.json({
-            from :"yehia",
-            to :"fady",
-         });
-      });
       app.use("/api/V0/",apiKeyAuth,authRouter);
+      app.use("/api/V0/",apiKeyAuth,userRouter);
       app.use(errorHandler);
 export default app;
