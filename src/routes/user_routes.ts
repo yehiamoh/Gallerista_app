@@ -8,8 +8,8 @@ const userRouter = express.Router();
 
 
 
-userRouter.get('user/:id',UserController.getUserById);
-userRouter.get('user/profile',ensureAuthentication,UserController.getProfile);
+userRouter.get('/user/:id',UserController.getUserById);
+userRouter.get('/user/profile',ensureAuthentication,UserController.getProfile);
 userRouter.post("/protected",(req,res)=>{
    res.json("welcome to protected route")
 }); 
