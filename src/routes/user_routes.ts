@@ -8,6 +8,6 @@ const userRouter = express.Router();
 
 
 userRouter.get('/user/:id',UserController.getUserById);
-userRouter.get('/user/profile',ensureAuthentication,UserController.getProfile);
+userRouter.get('/user/profile',UserController.getProfile);
 
 export default userRouter;
