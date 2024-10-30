@@ -1,8 +1,9 @@
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken";
-const secretKey = process.env.JWT_SECRET ;
-const secretRefrshKey = process.env.JWT_REFRESH_SECRET ;
 dotenv.config();
+const secretKey = process.env.JWT_SECRET;
+const secretRefrshKey = process.env.JWT_REFRESH_SECRET;
+
 
 export const generateAcessToken=(userId:string|undefined,role:string|undefined)=>{
    const payLoad={

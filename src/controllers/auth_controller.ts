@@ -104,7 +104,7 @@ export class AuthController {
          return;
       }
       catch (error: any) {
-         console.log(error.stack);
+         console.log(error);
          next(error);
       }
 
