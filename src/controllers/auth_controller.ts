@@ -3,7 +3,7 @@ import { PrismaClient, User, Role } from "@prisma/client";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import bcrypt from "bcrypt"
 import joi from "joi";
-import { genertaeToken } from "../util/jwt_utils";
+import { generateAcessToken, generateRefreshToken, verifyRefreshToken } from "../util/jwt_utils";
 
 const prisma = new PrismaClient();
 
@@ -35,7 +35,6 @@ export class AuthController {
                name: name,
                email: email,
                password: hashedPassword,
-               address: address,
                phone: phone,
                role: role === "admin" ? Role.admin : Role.user,
             }
@@ -83,7 +82,15 @@ export class AuthController {
             });
             return;
          }
-         const userToken = genertaeToken(user?.user_id, user?.role);
+         const userToken = generateAcessToken(user?.user_id, user?.role);
+         const refreshToken=generateRefreshToken(user.user_id,user.role);
+
+         res.cookie('jwt',refreshToken,{
+            httpOnly:true,
+            secure:true,
+            sameSite:"none",
+            maxAge:7*24*60*60*1000,
+         })
 
          res.status(200).json({
             message: "User logged in successfully",
@@ -101,5 +108,43 @@ export class AuthController {
          next(error);
       }
 
+   }
+   public static refresh :RequestHandler=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+      const cookies=req.cookies;
+      if(!cookies.jwt){
+         res.status(401).json({ message: 'Unauthorized' });
+         return;
+      }
+      const refreshToken = cookies.jwt
+
+      const decoded= verifyRefreshToken(refreshToken);
+      if(!decoded){
+         res.status(403).json({ message: 'Forbidden' });
+         return;
+      }
+      const user =await prisma.user.findUnique({
+         where:{
+            user_id:decoded.user_id, //potentail error
+         }
+      });
+      if(!user){
+         res.status(401).json({ message: 'Unauthorized' });
+         return;
+      }
+      const accessToken= generateAcessToken( user.user_id, user.role);
+
+      res.json({
+         token : accessToken,
+      })
+   }
+   public static logout :RequestHandler=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+      const cookies=req.cookies;
+      if(!cookies.jwt){
+          res.status(204);
+          return;
+      }
+      res.clearCookie('jwt', { httpOnly: true, sameSite: "none", secure: true });
+      res.json({ message: 'Cookie cleared' });
+      return;
    }
 }

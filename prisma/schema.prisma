@@ -24,9 +24,25 @@ model User{
   name String
   email String @unique
   password String
-  address String
   phone String
   role Role
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  boards Board[]
+
+
+}
+model Board{
+  Board_id String @id@default(uuid())
+  name String 
+  author_id String 
+  image_url String
+  description String
+  price Decimal 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  author User @relation(fields: [author_id],references: [user_id])
+ 
 }

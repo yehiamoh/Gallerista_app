@@ -1,16 +1,27 @@
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken";
 const secretKey = process.env.JWT_SECRET ;
+const secretRefrshKey = process.env.JWT_REFRESH_SECRET ;
 dotenv.config();
 
-export const genertaeToken=(userId:string|undefined,role:string|undefined)=>{
+export const generateAcessToken=(userId:string|undefined,role:string|undefined)=>{
    const payLoad={
-      userId,
-      role,
+      userId :userId,
+      role:role,
    }
-   return jwt.sign({payLoad},secretKey,{expiresIn:'1h'})
+   return jwt.sign({payLoad},secretKey,{expiresIn:'1m'})
+}
+export const generateRefreshToken=(userId:string|undefined,role:string|undefined)=>{
+   const payLoad={
+      userId :userId,
+      role:role,
+   }
+   return jwt.sign({payLoad},secretRefrshKey,{expiresIn:'60d'})
 }
 
-export const verifyToken = (token: string) => {
-   return jwt.verify(token, secretKey);
+export const verifyAccessToken = (token: string):jwt.JwtPayload => {
+   return jwt.verify(token, secretKey) as jwt.JwtPayload;
+};
+export const verifyRefreshToken = (token: string):jwt.JwtPayload => {
+   return jwt.verify(token, secretRefrshKey)as jwt.JwtPayload;
 };
