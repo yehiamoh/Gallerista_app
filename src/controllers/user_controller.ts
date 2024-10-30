@@ -74,6 +74,7 @@ export class UserController{
                user_id:userID
             }
          });
+         console.log(user);
          if(!user){
             res.status(404).json({
                message:"user not found"
