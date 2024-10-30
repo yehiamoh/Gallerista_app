@@ -120,6 +120,7 @@ export class AuthController {
       const refreshToken = cookies.jwt
 
       const decoded= verifyRefreshToken(refreshToken);
+      console.log("decoded verify refresh token", decoded.userId,decoded.role);
       if (!decoded || !decoded.userId) {
          res.status(403).json({ message: 'Forbidden' });
          return;
