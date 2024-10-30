@@ -24,23 +24,9 @@ export function ensureAuthentication(
       return;
     }
 
-    // Check for Bearer token format
-    if (!authHeader.startsWith('Bearer ')) {
-       res.status(401).json({
-        success: false,
-        message: "Invalid token format. Use 'Bearer <token>'"
-      });
-      return;
-    }
+  
 
-    // Extract token without 'Bearer ' prefix
-    const token = authHeader.split(' ')[1];
-
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is not defined in environment variables');
-    }
-
-    const decodedAccessToken = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
+    const decodedAccessToken = jwt.verify(authHeader, process.env.JWT_SECRET) as jwt.JwtPayload;
 
     if (!decodedAccessToken.userId) {
        res.status(401).json({
