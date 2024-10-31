@@ -48,7 +48,7 @@ export class UserController{
             });
          }
          res.status(200).json({
-            message:"user retrived sucessfully",
+            message:"User retrived sucessfully",
             user
          });
          return;
