@@ -29,7 +29,7 @@ export class UserController{
    }
    public static getUserById:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction):Promise<void>=>{
       try{
-         const userID=req.query.id as string;
+         const userID=req.params.id ;
          if(!userID){
             res.status(401).json({
                message:"un authorized",
