@@ -8,6 +8,5 @@ const userRouter = express.Router();
 
 userRouter.use(ensureAuthentication);
 userRouter.get('/user/profile',UserController.getProfile);
-userRouter.post('/board',upload.single('image'),UserController.addBoard);
 userRouter.get('/user/:id/',UserController.getUserById);
 export default userRouter;

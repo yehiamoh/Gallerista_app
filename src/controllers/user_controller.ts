@@ -100,6 +100,7 @@ export class UserController{
             res.status(404).json({
                message:"user not found"
             });
+            return;
          }
          res.status(200).json({
             message:"user retrived sucessfully",
@@ -166,64 +167,6 @@ export class UserController{
                    created_at: board.created_at,
                }))
            }
-         });
-         return;
-      }
-      catch(error:any){
-         console.log(error);
-         next(error);
-      }
-   }
-   public static addBoard:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction):Promise<void>=>{
-      try{
-         const {name,description,price}=req.body;
-         const file =req.file;
-         if(!file){
-          res.status(400).json({ error: 'No file uploaded' });
-          return;
-         }
-         const {error} =this.boardSchema.validate(req.body);
-         if(error){
-            res.status(400).json({
-               error,
-            });
-            return;
-         }
-         const userID = req.userId;
-         if(!userID){
-            res.status(401).json({
-               message: "Unauthorized"
-            });
-            return;
-         }
-         const upload= await cloudinary.uploader.upload(file.path,{
-            folder:"uploads"
-         });
-
-         const board=await prisma.board.create({
-            data:{
-               author_id:userID,
-               description:description,
-               name:name,
-               image_url:upload.secure_url,
-               price:parseFloat(price),
-            }
-         });
-
-         if(!board){
-            res.status(400).json({
-               message:"Cannot create a board"
-            })
-         }
-         res.status(201).json({
-            message: "Board created successfully",
-            board: {
-               Board_id: board.Board_id,
-               name: board.name,
-               image_url: board.image_url,
-               description: board.description,
-               price: board.price,
-            }
          });
          return;
       }

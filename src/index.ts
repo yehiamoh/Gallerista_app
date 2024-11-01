@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import authRouter from "./routes/auth_routes";
 import userRouter from "./routes/user_routes";
+import boardRouter from "./routes/board_routes";
 import errorHandler from "./middleware/error_handler";
 import { apiKeyAuth } from "./util/api_key"
 import cookieParser from "cookie-parser";
@@ -37,5 +38,6 @@ app.get('/api/V0/dummy', (req, res) => {
 });
 app.use("/api/V0/", apiKeyAuth, authRouter);
 app.use("/api/V0/", apiKeyAuth, userRouter);
+app.use("/api/V0/", apiKeyAuth, boardRouter);
 app.use(errorHandler);
 export default app;

@@ -7,6 +7,8 @@ import { generateAcessToken, generateRefreshToken } from "../util/jwt_utils";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
+import upload from "../util/cloudinary-config";
+import { v2 as cloudinary } from 'cloudinary';
 
 
 const prisma = new PrismaClient();
@@ -31,19 +33,25 @@ export class AuthController {
    public static register: RequestHandler = async (req: Request, res: Response, next): Promise<void> => {
 
       try {
-         const { name, email, password, address, phone, role } = req.body;
+         const { name, email, password,phone } = req.body;
+         const file =req.file;
          const { error } = this.registerSchema.validate(req.body);
          if (error) {
             res.status(400).json({ message: error.details[0].message });
             return;
          }
          const hashedPassword = await bcrypt.hash(password, 10);
+         const profilePicture=await cloudinary.uploader.upload(file.path,{
+            folder:"profile_pictures"
+         })
+
          const user = await prisma.user.create({
             data: {
                name: name,
                email: email,
                password: hashedPassword,
                phone: phone,
+               profile_picture:profilePicture.secure_url,
             }
          });
          res.status(201).json({
