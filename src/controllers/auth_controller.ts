@@ -98,6 +98,14 @@ export class AuthController {
          }
          const userToken = generateAcessToken(user.user_id);
          console.log("userToken",userToken,user.user_id);
+
+         res.cookie("auth_token",userToken,{
+           httpOnly: true,        // Prevents JavaScript access to the cookie 
+           sameSite: 'strict',    // Protection against CSRF
+           maxAge:  7 * 24 * 60 * 60 * 1000,// 24 hours
+           path: '/'             // Cookie is available for all paths
+         });
+
        //  const refreshToken=generateRefreshToken(user.user_id);
         // console.log("refreshToken",refreshToken,user.user_id);
 
