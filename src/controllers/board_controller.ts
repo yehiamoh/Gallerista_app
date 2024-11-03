@@ -191,6 +191,7 @@ export class BoardController {
         count: boards.length,
         boards: boards,
       });
+      return;
     } catch (error: any) {
       console.log(error);
       next(error);
