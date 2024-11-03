@@ -14,6 +14,7 @@ export function ensureAuthentication(
   next: NextFunction
 ) :void{
   try {
+    console.log('ensureAuthentication triggered on path:', req.path);
     const authHeader = req.headers.authorization;
     
     if (!authHeader) {
