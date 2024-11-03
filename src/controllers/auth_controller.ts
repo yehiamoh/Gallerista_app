@@ -39,9 +39,21 @@ export class AuthController {
             return;
          }
          const hashedPassword = await bcrypt.hash(password, 10);
-         const profilePicture=await cloudinary.uploader.upload(file.path,{
-            folder:"profile_pictures"
-         })
+         
+          // Handle profile picture upload if a file is provided
+          let profilePictureUrl = null;
+          if (file) {
+              try {
+                  const uploadResult = await cloudinary.uploader.upload(file.path, {
+                      folder: "profile_pictures"
+                  });
+                  profilePictureUrl = uploadResult.secure_url;
+              } catch (cloudinaryError) {
+                  console.error('Cloudinary upload failed:', cloudinaryError);
+                  // Continue with user creation even if image upload fails
+              }
+          }
+          
 
          const user = await prisma.user.create({
             data: {
@@ -49,7 +61,7 @@ export class AuthController {
                email: email,
                password: hashedPassword,
                phone: phone,
-               profile_picture:profilePicture.secure_url,
+               profile_picture:profilePictureUrl,
             }
          });
          res.status(201).json({
