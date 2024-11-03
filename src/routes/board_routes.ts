@@ -5,11 +5,15 @@ import { ensureAuthentication } from "../middleware/verify_jwt";
 
 const boardRouter = express.Router();
 
-// Public routes (no authentication required)
-boardRouter.get('/boards', BoardController.getAllBoards);
-boardRouter.get('/board/:id', BoardController.getBoardByID);
+// Public routes
+boardRouter.route('/boards')
+  .get(BoardController.getAllBoards);
 
-// Protected routes (authentication required)
-boardRouter.post('/board', ensureAuthentication, upload.single('image'), BoardController.addBoard);
+boardRouter.route('/board/:id')
+  .get(BoardController.getBoardByID);
+
+// Protected routes
+boardRouter.route('/board')
+  .post(ensureAuthentication, upload.single('image'), BoardController.addBoard);
 
 export default boardRouter;
