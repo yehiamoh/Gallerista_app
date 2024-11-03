@@ -13,7 +13,7 @@ boardRouter.route('/board/:id')
   .get(BoardController.getBoardByID);
 
 // Protected routes
-boardRouter.route('/board')
-  .post(ensureAuthentication, upload.single('image'), BoardController.addBoard);
+/*boardRouter.route('/board')
+  .post(ensureAuthentication, upload.single('image'), BoardController.addBoard);*/
 
 export default boardRouter;
