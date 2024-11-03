@@ -22,9 +22,7 @@ export class AuthController {
       name: joi.string().required(),
       email: joi.string().email().required(),
       password: joi.string().min(6).required(),
-      address: joi.string().required(),
       phone: joi.string().required(),
-      role: joi.string().valid("admin", "user").required()
    });
    protected static loginSchema = joi.object({
       email: joi.string().email().required(),
