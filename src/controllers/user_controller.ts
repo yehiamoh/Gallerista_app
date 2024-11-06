@@ -109,6 +109,7 @@ export class UserController{
                name: user.name,
                email: user.email,
                phone: user.phone,
+               profile_picture:user.profile_picture,
                boards: user.boards.map(board => ({
                    Board_id: board.Board_id,
                    name: board.name,
