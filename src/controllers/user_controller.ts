@@ -158,6 +158,7 @@ export class UserController{
                name: user.name,
                email: user.email,
                phone: user.phone,
+               profile_picture:user.profile_picture,
                boards: user.boards.map(board => ({
                    Board_id: board.Board_id,
                    name: board.name,
@@ -169,6 +170,35 @@ export class UserController{
            }
          });
          return;
+      }
+      catch(error:any){
+         console.log(error);
+         next(error);
+      }
+   }
+   public static updateProfile:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction):Promise<void>=>{
+      try{
+         const userId =req.userId;
+         if(!userId){
+            res.status(401).json({
+               message:"Un Authorized",
+            });
+            return;
+         }
+         const {profile_picture,name,phone}=req.body;
+         const user =await prisma.user.findUnique({
+            where:{
+               user_id:userId
+            }
+         });
+         if(!user){
+            res.status(404).json({
+               message:"user not found"
+            });
+            return;
+         }
+
+
       }
       catch(error:any){
          console.log(error);
