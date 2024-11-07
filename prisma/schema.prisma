@@ -14,11 +14,6 @@ datasource db {
   directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
-enum Role {
-  admin 
-  user 
-}
-
 model User{
   user_id String @id@default(uuid())
   name String
@@ -30,6 +25,7 @@ model User{
   updated_at DateTime @updatedAt
 
   boards Board[]
+  saved_board SavedBoard[]
 
 
 }
@@ -43,6 +39,17 @@ model Board{
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  author User @relation(fields: [author_id],references: [user_id])
- 
+  saved_by SavedBoard[]
+
+  author User @relation(fields: [author_id],references: [user_id]) 
+}
+
+model SavedBoard{
+  user_id String 
+  board_id String
+
+  user User @relation(fields: [user_id],references: [user_id])
+  board Board@relation(fields: [board_id],references: [Board_id])
+
+  @@id([user_id,board_id])
 }

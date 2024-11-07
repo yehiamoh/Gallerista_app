@@ -16,4 +16,12 @@ boardRouter.route('/board/:id')
 boardRouter.route('/board')
   .post(ensureAuthentication, upload.single('image'), BoardController.addBoard);
 
+boardRouter.route('/saveBoard')
+  .get(ensureAuthentication,BoardController.getSavedBoards);
+
+boardRouter.route('/saveBoard/:id')
+  .post(ensureAuthentication,BoardController.saveBoard);
+
+
+
 export default boardRouter;

@@ -197,4 +197,86 @@ export class BoardController {
       next(error);
     }
   };
+  public static saveBoard:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction)=>{
+    try{
+      const boardId=req.params.id;
+      const userId=req.userId;
+      if(!boardId){
+        res.status(422).json({
+          error:"Board Id needed"
+        });
+        return;
+      }
+      if(!userId){
+        res.status(422).json({
+          error:"User Id needed"
+        });
+        return;
+      }
+
+      const save= await prisma.savedBoard.create({
+        data:{
+          user_id:userId,
+          board_id:boardId,
+        }
+      });
+
+      if(!save){
+        res.status(400).json({
+          error:"Failed to save the post"
+        });
+        return;
+      }
+      res.status(201).json({
+        message:"Board Saved Successfullys",
+        save
+      });
+      return;
+    }
+    catch(error:any){
+      console.log(error);
+      next(error);
+    }
+  }
+  public static getSavedBoards:RequestHandler =async(req:AuthRequest,res:Response,next:NextFunction)=>{
+    try{
+      const userId=req.userId;
+      if(!userId){
+        res.status(422).json({
+          error:"User Id is required"
+        });
+      }
+
+      const savedBoards =await prisma.user.findUnique({
+        where:{
+          user_id:userId
+        },
+        select:{
+          user_id:true,
+          saved_board:{
+            include:{
+              board:true,
+            }
+          }
+        }
+      });
+
+      if(!savedBoards){
+        res.status(404).json({
+          error:"cannot find user saved boards"
+        });
+        return;
+      }
+      res.status(200).json({
+        user_Id:savedBoards.user_id,
+        saved_Boards:savedBoards.saved_board.map((savedBoard)=>{
+          savedBoard.board
+        })
+      })
+    }
+    catch(error:any){
+      console.log(error);
+      next(error);
+    }
+  }
 }
