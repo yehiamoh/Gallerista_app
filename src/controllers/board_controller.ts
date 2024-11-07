@@ -244,7 +244,7 @@ export class BoardController {
         return;
       }
       res.status(201).json({
-        message:"Board Saved Successfullys",
+        message:"Board Saved Successfully",
         save
       });
       return;
@@ -286,6 +286,64 @@ export class BoardController {
       res.status(200).json({
         user_Id:savedBoards.user_id,
         saved_Boards: savedBoards.saved_board.map((savedBoard) => savedBoard.board), // Fix: Return savedBoard.board
+      });
+      return;
+    }
+    catch(error:any){
+      console.log(error);
+      next(error);
+    }
+  }
+  public static unSaveBoard:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction)=>{
+    try{
+      const boardId=req.params.id;
+      const userId=req.userId;
+      if(!boardId){
+        res.status(422).json({
+          error:"Board Id needed"
+        });
+        return;
+      }
+      if(!userId){
+        res.status(422).json({
+          error:"User Id needed"
+        });
+        return;
+      }
+
+      const existingSave =await prisma.savedBoard.findUnique({
+        where:{
+          user_id_board_id: {
+            user_id: userId,
+            board_id: boardId,
+          },
+        }
+      });
+
+      if (!existingSave) {
+         res.status(409).json({
+          error: "You havenot saved this board",
+        });
+        return;
+      }
+
+      const unSave= await prisma.savedBoard.delete({
+        where:{
+          user_id_board_id:{
+            user_id:userId,
+            board_id:boardId
+          }
+        }
+      });
+
+      if(!unSave){
+        res.status(400).json({
+          error:"Failed to unsave the post"
+        });
+        return;
+      }
+      res.status(200).json({
+        message:"Board unSaved Successfully",
       });
       return;
     }
