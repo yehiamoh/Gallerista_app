@@ -261,7 +261,7 @@ export class BoardController {
         }
       });
 
-      if(!savedBoards){
+      if(!savedBoards || savedBoards.saved_board.length===0){
         res.status(404).json({
           error:"cannot find user saved boards"
         });
@@ -269,10 +269,9 @@ export class BoardController {
       }
       res.status(200).json({
         user_Id:savedBoards.user_id,
-        saved_Boards:savedBoards.saved_board.map((savedBoard)=>{
-          savedBoard.board
-        })
-      })
+        saved_Boards: savedBoards.saved_board.map((savedBoard) => savedBoard.board), // Fix: Return savedBoard.board
+      });
+      return;
     }
     catch(error:any){
       console.log(error);
