@@ -214,6 +214,22 @@ export class BoardController {
         return;
       }
 
+      const existingSave =await prisma.savedBoard.findUnique({
+        where:{
+          user_id_board_id: {
+            user_id: userId,
+            board_id: boardId,
+          },
+        }
+      });
+
+      if (existingSave) {
+         res.status(409).json({
+          error: "You have already saved this board",
+        });
+        return;
+      }
+
       const save= await prisma.savedBoard.create({
         data:{
           user_id:userId,
