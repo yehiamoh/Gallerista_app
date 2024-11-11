@@ -132,7 +132,7 @@ public static getAllFollowers:RequestHandler=async(req:AuthRequest,res:Response,
       res.status(200).json({
          message:"Followers retrieved successfully",
          count:followers.length,
-         followers:followers.map(f=>{f.follower})
+         followers:followers.map(f=>f.follower)
       })
 
    }
