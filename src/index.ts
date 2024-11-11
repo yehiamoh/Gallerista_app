@@ -9,6 +9,7 @@ import errorHandler from "./middleware/error_handler";
 import { apiKeyAuth } from "./util/api_key"
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import followRouter from "./routes/follow_routes";
 dotenv.config();
 
 const port = process.env.PORT || 8080;
@@ -39,5 +40,6 @@ app.get('/api/V0/dummy', (req, res) => {
 app.use("/api/V0/", apiKeyAuth, authRouter);
 app.use("/api/V0/", apiKeyAuth, userRouter);
 app.use("/api/V0/", apiKeyAuth, boardRouter);
+app.use("/api/V0/", apiKeyAuth, followRouter);
 app.use(errorHandler);
 export default app;

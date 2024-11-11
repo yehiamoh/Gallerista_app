@@ -25,7 +25,10 @@ model User{
   updated_at DateTime @updatedAt
 
   boards Board[]
-  saved_board SavedBoard[]
+  saved_board SavedBoard[] 
+
+  follower Follow[] @relation(name: "UserFollowers")
+  followed Follow[] @relation(name: "UserFollowing")
 
 
 }
@@ -52,4 +55,13 @@ model SavedBoard{
   board Board@relation(fields: [board_id],references: [Board_id])
 
   @@id([user_id,board_id])
+}
+
+model Follow{
+  follower_id String
+  followed_id String
+  created_at DateTime @default(now())
+  follower User @relation(name: "UserFollowers", fields: [follower_id], references: [user_id])
+  followed User @relation(name: "UserFollowing", fields: [followed_id], references: [user_id])
+  @@id([follower_id,followed_id])
 }
