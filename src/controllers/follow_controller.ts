@@ -117,7 +117,7 @@ public static getAllFollowers:RequestHandler=async(req:AuthRequest,res:Response,
       }
       const followers = await prisma.follow.findMany({
          where: {
-            followed_id: followerId 
+            follower_id: followerId 
          },
          select: {
             follower: {
