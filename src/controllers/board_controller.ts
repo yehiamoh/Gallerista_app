@@ -269,6 +269,8 @@ export class BoardController {
         },
         select:{
           user_id:true,
+          name:true,
+          profile_picture:true,
           saved_board:{
             include:{
               board:true,
@@ -285,6 +287,8 @@ export class BoardController {
       }
       res.status(200).json({
         user_Id:savedBoards.user_id,
+        user_name:savedBoards.name,
+        profile_picture:savedBoards.profile_picture,
         saved_Boards: savedBoards.saved_board.map((savedBoard) => savedBoard.board), // Fix: Return savedBoard.board
       });
       return;
