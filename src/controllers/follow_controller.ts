@@ -95,8 +95,7 @@ public static unFollow:RequestHandler =async(req:AuthRequest,res:Response,next:N
       }
    });
    res.status(201).json({
-      message:"Follow created",
-      follow
+      message:"un follow done successfully",
    });
    return;
 
