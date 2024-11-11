@@ -273,7 +273,17 @@ export class BoardController {
           profile_picture:true,
           saved_board:{
             include:{
-              board:true,
+              board:{
+                include:{
+                  author:{
+                    select:{
+                      user_id:true,
+                      name:true,
+                      profile_picture:true,
+                    }
+                  },
+                }
+              },
             }
           }
         }
@@ -286,10 +296,23 @@ export class BoardController {
         return;
       }
       res.status(200).json({
-        user_Id:savedBoards.user_id,
-        user_name:savedBoards.name,
-        profile_picture:savedBoards.profile_picture,
-        saved_Boards: savedBoards.saved_board.map((savedBoard) => savedBoard.board), // Fix: Return savedBoard.board
+        user_id: savedBoards.user_id,
+        user_name: savedBoards.name,
+        profile_picture: savedBoards.profile_picture,
+        saved_boards: savedBoards.saved_board.map((savedBoard) => ({
+        board_id: savedBoard.board.Board_id,
+        name: savedBoard.board.name,
+        image_url: savedBoard.board.image_url,
+        description: savedBoard.board.description,
+        price: savedBoard.board.price,
+        created_at: savedBoard.board.created_at,
+        updated_at: savedBoard.board.updated_at,
+        author: {
+          author_id: savedBoard.board.author.user_id,
+          name: savedBoard.board.author.name,
+          profile_picture: savedBoard.board.author.profile_picture,
+        },
+      })),
       });
       return;
     }
