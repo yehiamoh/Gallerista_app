@@ -5,6 +5,6 @@ import { FollowController } from "../controllers/follow_controller";
 const followRouter = express.Router();
 
 followRouter.get('/follow',ensureAuthentication,FollowController.getAllFollowers)
-followRouter.get('/follow/:id',ensureAuthentication,FollowController.follow);
+followRouter.post('/follow/:id',ensureAuthentication,FollowController.follow);
 followRouter.delete('/follow/:id/',ensureAuthentication,FollowController.unFollow);
 export default followRouter;
