@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request,Response,NextFunction, RequestHandler } from "express";
+import bcrypt from "bcrypt"
 
 import joi from "joi";
 
@@ -186,7 +187,8 @@ export class UserController{
             });
             return;
          }
-         const {profile_picture,name,phone}=req.body;
+         const {name,phone,email,password}=req.body;
+       
          const user =await prisma.user.findUnique({
             where:{
                user_id:userId
@@ -198,7 +200,42 @@ export class UserController{
             });
             return;
          }
+         const file=req.file;
+         let profile_picture=user.profile_picture;
+         if(file){
+            const upload=await cloudinary.uploader.upload(file.path, {
+               folder: "uploads",
+             });
+             profile_picture=upload.secure_url;
+         }
+         const newEmail=email||user.email;
+         const newName=name||user.name;
+         const newPassword=password?await bcrypt.hash(password,10):user.password;
+         const newProfilePicture=profile_picture;
+         const newPhone=phone||user.phone;
 
+         const update=await prisma.user.update({
+            where:{
+               user_id:userId,
+            },
+            data:{
+               name:newName,
+               email:newEmail,
+               password:newPassword,
+               profile_picture:newProfilePicture,
+               phone:newPhone,
+            }
+         });
+         if(!update){
+            res.status(404).json({
+               error:"Error in updating user"
+            });
+            return;
+         }
+         res.status(200).json({
+            message:"User updated successfully",
+            updated_user:update,
+         })
 
       }
       catch(error:any){
