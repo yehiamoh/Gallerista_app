@@ -166,6 +166,7 @@ export class BoardController {
       const boards = await prisma.board.findMany({
         select: {
           Board_id: true,
+          name:true,
           image_url: true,
           description: true,
           price: true,

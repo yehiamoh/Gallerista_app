@@ -64,10 +64,13 @@ export class AuthController {
                profile_picture:profilePictureUrl,
             }
          });
+         const userToken = generateAcessToken(user.user_id)
+         console.log("register function ",userToken)
          res.status(201).json({
             user_id: user.user_id,
             name:user.name,
-            email: user.email
+            email: user.email,
+            token:userToken
          });
          return;
       }
