@@ -379,4 +379,57 @@ export class BoardController {
       next(error);
     }
   }
+  public static deleteBoard:RequestHandler=async (req:AuthRequest,res:Response,next:NextFunction) => {
+    try{
+      const boardId=req.params.id;
+      const userId=req.userId;
+      if(!boardId){
+        res.status(422).json({
+          error:"Board Id needed"
+        });
+        return;
+      }
+      if(!userId){
+        res.status(422).json({
+          error:"User Id needed"
+        });
+        return;
+      }
+
+      const board=await prisma.board.findUnique({
+        where:{
+          Board_id:boardId,
+        },
+        select:{
+          author_id:true,
+        }
+      });
+
+      if(!board){
+        res.status(400).json({
+          error:"Board not found"
+        });
+        return;
+      }
+      if(userId!==board.author_id){
+        res.status(401).json({
+          error:"You do not have permission to delete this board"
+        });
+        return;
+      }
+      await prisma.board.delete({
+        where:{
+          Board_id:boardId,
+        }
+      });
+      res.status(200).json({
+        error:"Board deleted"
+      });
+      return;
+    }
+    catch(error:any){
+      console.log(error);
+      next(error);
+    }
+  }
 }

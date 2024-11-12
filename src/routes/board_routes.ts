@@ -25,6 +25,9 @@ boardRouter.route('/saveBoard/:id')
 boardRouter.route('/unSaveBoard/:id')
   .delete(ensureAuthentication,BoardController.unSaveBoard);
 
+boardRouter.route('/deleteBoard/:id')
+  .delete(ensureAuthentication,BoardController.deleteBoard);
+
 
 
 export default boardRouter;
