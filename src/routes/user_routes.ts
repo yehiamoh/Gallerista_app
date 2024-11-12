@@ -8,5 +8,5 @@ const userRouter = express.Router();
 
 userRouter.get('/user/profile',ensureAuthentication,UserController.getProfile);
 userRouter.get('/user/:id/',ensureAuthentication,UserController.getUserById);
-userRouter.patch('/user/:id/',ensureAuthentication,UserController.updateProfile);
+userRouter.patch('/user/',ensureAuthentication,UserController.updateProfile);
 export default userRouter;
