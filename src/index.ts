@@ -22,15 +22,9 @@ const corsOptions = {
    origin: [
       'http://localhost:3000',     // Assuming your friend uses port 3000
       'http://localhost:5173', 
-      'https://gallery-git-main-fadys-projects-ce6c30fb.vercel.app',  
-      'https://gallery-xh7a.vercel.app',
-      'https://gallery-fadys-projects-ce6c30fb.vercel.app',
-      'https://gallery-gilt-kappa.vercel.app/?vercelToolbarCode=Bf2y6VJI3aOBcKT',
-      'https://gallery-git-main-fadys-projects-ce6c30fb.vercel.app/?vercelToolbarCode=PId5OuAjBPc9UlD',
-      'https://gallery-ln0zbjipd-fadys-projects-ce6c30fb.vercel.app/?vercelToolbarCode=23mKcphaOmjAoow',
-      'https://gallery-gilt-kappa.vercel.app/',
-      
-
+      'https://gallery-gilt-kappa.vercel.app',
+      'https://gallery-git-main-fadys-projects-ce6c30fb.vercel.app',
+      'https://gallery-ln0zbjipd-fadys-projects-ce6c30fb.vercel.app',
       // Add any other frontend URLs that need access
    ],
    credentials: true,             // This allows cookies to be sent with requests
