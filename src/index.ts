@@ -28,7 +28,7 @@ const corsOptions = {
       'https://gallery-gilt-kappa.vercel.app/?vercelToolbarCode=Bf2y6VJI3aOBcKT',
       'https://gallery-git-main-fadys-projects-ce6c30fb.vercel.app/?vercelToolbarCode=PId5OuAjBPc9UlD',
       'https://gallery-ln0zbjipd-fadys-projects-ce6c30fb.vercel.app/?vercelToolbarCode=23mKcphaOmjAoow',
-      'http://gallery-gilt-kappa.vercel.app',
+      'https://gallery-gilt-kappa.vercel.app/',
       
 
       // Add any other frontend URLs that need access
