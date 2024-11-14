@@ -9,7 +9,7 @@ const boardRouter = express.Router();
 boardRouter.route('/boards')
   .get(BoardController.getAllBoards);
 boardRouter.route('/boards2')
-  .get(BoardController.getAllBoards);
+  .get(BoardController.getAllBoards2);
 
 boardRouter.route('/board/:id')
   .get(BoardController.getBoardByID);
