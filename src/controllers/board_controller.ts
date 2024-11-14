@@ -5,7 +5,7 @@ import joi from "joi";
 
 import dotenv from "dotenv";
 
-import upload from "../util/cloudinary-config";
+import { dominantColor } from "../util/extract_dominant_color";
 import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
@@ -191,6 +191,60 @@ export class BoardController {
       res.status(200).json({
         count: boards.length,
         boards: boards,
+      });
+      return;
+    } catch (error: any) {
+      console.log(error);
+      next(error);
+    }
+  };
+  public static getAllBoards2: RequestHandler = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const boards = await prisma.board.findMany({
+        select: {
+          Board_id: true,
+          name:true,
+          image_url: true,
+          description: true,
+          price: true,
+          author: {
+            select: {
+              user_id: true,
+              email: true,
+              name: true,
+              profile_picture: true,
+            },
+          },
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+      });
+
+      if (!boards.length) {
+        res.status(404).json({ message: "No boards found" });
+        return;
+      }
+      res.status(200).json({
+        count: boards.length,
+        boards: boards.map(board => ({
+          board_id: board.Board_id,
+          name: board.name,
+          image_url: board.image_url,
+          dominant_color:dominantColor(board.image_url),
+          description: board.description,
+          price: board.price,
+          author: {
+            user_id: board.author.user_id,
+            email: board.author.email,
+            name: board.author.name,
+            profile_picture: board.author.profile_picture,
+          },
+        })),
       });
       return;
     } catch (error: any) {

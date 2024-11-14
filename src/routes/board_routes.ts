@@ -8,6 +8,8 @@ const boardRouter = express.Router();
 // Public routes
 boardRouter.route('/boards')
   .get(BoardController.getAllBoards);
+boardRouter.route('/boards2')
+  .get(BoardController.getAllBoards);
 
 boardRouter.route('/board/:id')
   .get(BoardController.getBoardByID);
