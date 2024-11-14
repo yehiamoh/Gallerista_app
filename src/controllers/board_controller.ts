@@ -229,13 +229,13 @@ export class BoardController {
         res.status(404).json({ message: "No boards found" });
         return;
       }
-      res.status(200).json({
-        count: boards.length,
-        boards: boards.map(board => ({
+
+      const boardsWithDominantColor= await Promise.all(
+        boards.map(async board => ({
           board_id: board.Board_id,
           name: board.name,
           image_url: board.image_url,
-          dominant_color:dominantColor(board.image_url),
+          dominant_color:await dominantColor(board.image_url),
           description: board.description,
           price: board.price,
           author: {
@@ -245,6 +245,11 @@ export class BoardController {
             profile_picture: board.author.profile_picture,
           },
         })),
+      )
+      res.status(200).json({
+        count: boards.length,
+        boards:boardsWithDominantColor,
+        
       });
       return;
     } catch (error: any) {
