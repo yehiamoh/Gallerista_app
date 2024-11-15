@@ -79,14 +79,21 @@ export class BoardController {
       const upload = await cloudinary.uploader.upload(file.path, {
         folder: "uploads",
       });
-
+      const image= await prisma.boardImage.create({
+        data:{
+          image_url:upload.secure_url,
+          heigth:upload.height,
+          width:upload.width,
+          dominantColor:await dominantColor(upload.secure_url)
+        }
+      })
       const board = await prisma.board.create({
         data: {
           author_id: userID,
           description: description,
           name: name,
-          image_url: upload.secure_url,
           price: parseFloat(price),
+          image_id:image.image_id,
         },
       });
 
@@ -100,7 +107,7 @@ export class BoardController {
         board: {
           Board_id: board.Board_id,
           name: board.name,
-          image_url: board.image_url,
+          image_url: image.image_url,
           description: board.description,
           price: board.price,
         },
@@ -137,6 +144,14 @@ export class BoardController {
               boards: true,
             },
           },
+          image:{
+            select:{
+              image_url:true,
+              dominantColor:true,
+              width:true,
+              heigth:true,
+            }
+          }
         },
       });
 
@@ -167,7 +182,7 @@ export class BoardController {
         select: {
           Board_id: true,
           name:true,
-          image_url: true,
+          image_id: true,
           description: true,
           price: true,
           author: {
@@ -178,6 +193,14 @@ export class BoardController {
               profile_picture: true,
             },
           },
+          image:{
+            select:{
+              image_url:true,
+              dominantColor:true,
+              width:true,
+              heigth:true,
+            }
+          }
         },
         orderBy: {
           created_at: "desc",
@@ -198,7 +221,7 @@ export class BoardController {
       next(error);
     }
   };
-  public static getAllBoards2: RequestHandler = async (
+/*  public static getAllBoards2: RequestHandler = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
@@ -256,7 +279,7 @@ export class BoardController {
       console.log(error);
       next(error);
     }
-  };
+  };*/
   public static saveBoard:RequestHandler=async(req:AuthRequest,res:Response,next:NextFunction)=>{
     try{
       const boardId=req.params.id;
@@ -342,10 +365,19 @@ export class BoardController {
                       profile_picture:true,
                     }
                   },
+                  image:{
+                    select:{
+                      image_url:true,
+                      dominantColor:true,
+                      width:true,
+                      heigth:true,
+                    }
+                  }
                 }
               },
+              
             }
-          }
+          },
         }
       });
 
@@ -362,11 +394,17 @@ export class BoardController {
         saved_boards: savedBoards.saved_board.map((savedBoard) => ({
         board_id: savedBoard.board.Board_id,
         name: savedBoard.board.name,
-        image_url: savedBoard.board.image_url,
+        //image_url: savedBoard.board.image_url,
         description: savedBoard.board.description,
         price: savedBoard.board.price,
         created_at: savedBoard.board.created_at,
         updated_at: savedBoard.board.updated_at,
+        image:{
+          image_url:savedBoard.board.image.image_url,
+          dominant_color:savedBoard.board.image.dominantColor,
+          width:savedBoard.board.image.width,
+          height:savedBoard.board.image.heigth,
+        },
         author: {
           author_id: savedBoard.board.author.user_id,
           name: savedBoard.board.author.name,

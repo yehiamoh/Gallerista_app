@@ -34,9 +34,9 @@ model User{
 }
 model Board{
   Board_id String @id@default(uuid())
+  image_id String @unique
   name String 
   author_id String 
-  image_url String
   description String
   price Decimal 
   created_at DateTime @default(now())
@@ -45,8 +45,17 @@ model Board{
   saved_by SavedBoard[]
 
   author User @relation(fields: [author_id],references: [user_id]) 
-}
 
+  image BoardImage @relation(fields: [image_id],references: [image_id])
+}
+model BoardImage{
+  image_id String @id @default(uuid())
+  image_url String 
+  dominantColor String 
+  width Float  
+  heigth Float
+  board Board?
+}
 model SavedBoard{
   user_id String 
   board_id String
