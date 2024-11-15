@@ -77,7 +77,7 @@ export class BoardController {
         return;
       }
       const upload = await cloudinary.uploader.upload(file.path, {
-        folder: "uploads",
+        folder: "board_images",
       });
       const image= await prisma.boardImage.create({
         data:{

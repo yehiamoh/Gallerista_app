@@ -93,8 +93,29 @@ export class UserController{
             where:{
                user_id:userID
             },
-            include:{
-               boards:true,
+            select:{
+               user_id:true,
+               name:true,
+               phone:true,
+               email:true,
+               profile_picture:true,
+               boards:{
+                  select:{
+                     Board_id:true,
+                     name:true,
+                     price:true,
+                     description:true,
+                     created_at:true,
+                     image:{
+                        select:{
+                           image_url:true,
+                           dominantColor:true,
+                           width:true,
+                           heigth:true,
+                        }
+                     }
+                  }
+               },
             }
          });
          if(!user){
@@ -114,10 +135,15 @@ export class UserController{
                boards: user.boards.map(board => ({
                    Board_id: board.Board_id,
                    name: board.name,
-                   image_url: board.image_url,
                    description: board.description,
                    price: board.price,
                    created_at: board.created_at,
+                   image:{
+                     image_url:board.image.image_url,
+                     dominant_color:board.image.dominantColor,
+                     width:board.image.width,
+                     height:board.image.heigth,
+                   }
                }))
            }
          });
@@ -144,7 +170,23 @@ export class UserController{
                user_id:userID
             },
             include:{
-               boards:true
+               boards:{
+                  select:{
+                     Board_id:true,
+                     name:true,
+                     price:true,
+                     created_at:true,
+                     description:true,
+                     image:{
+                        select:{
+                           image_url:true,
+                           dominantColor:true,
+                           width:true,
+                           heigth:true,
+                        }
+                     }
+                  }
+               }
             }
          });
          console.log(user);
@@ -164,10 +206,15 @@ export class UserController{
                boards: user.boards.map(board => ({
                    Board_id: board.Board_id,
                    name: board.name,
-                   image_url: board.image_url,
                    description: board.description,
                    price: board.price,
                    created_at: board.created_at,
+                   image:{
+                     image_url:board.image.image_url,
+                     dominant_color:board.image.dominantColor,
+                     width:board.image.width,
+                     height:board.image.heigth,
+                   }
                }))
            }
          });
@@ -204,7 +251,7 @@ export class UserController{
          let profile_picture=user.profile_picture;
          if(file){
             const upload=await cloudinary.uploader.upload(file.path, {
-               folder: "uploads",
+               folder: "profile_pictures",
              });
              profile_picture=upload.secure_url;
          }
