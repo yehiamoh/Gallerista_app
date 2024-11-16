@@ -46,7 +46,7 @@ model Board{
 
   author User @relation(fields: [author_id],references: [user_id]) 
 
-  image BoardImage @relation(fields: [image_id],references: [image_id])
+  image BoardImage @relation(fields: [image_id],references: [image_id],onDelete: Cascade,onUpdate: Cascade)
 }
 model BoardImage{
   image_id String @id @default(uuid())
@@ -61,7 +61,7 @@ model SavedBoard{
   board_id String
 
   user User @relation(fields: [user_id],references: [user_id])
-  board Board@relation(fields: [board_id],references: [Board_id])
+  board Board@relation(fields: [board_id],references: [Board_id],onDelete: Cascade,onUpdate: Cascade)
 
   @@id([user_id,board_id])
 }
